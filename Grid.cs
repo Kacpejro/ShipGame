@@ -8,10 +8,9 @@ namespace ShipGame.GridClass
 {
 public class Grid
     {
-        private string[,] grid = new string[8, 8];
-        private int x = 0;
-        private int y = 0;
-        private string rotation;
+        protected string[,] grid = new string[8, 8];
+        protected int x = 0;
+        protected int y = 0;
         public void resetGrid()
         {
             for (int i = 0; i < 8; i++)
@@ -92,7 +91,7 @@ public class Grid
                     case ConsoleKey.DownArrow: case ConsoleKey.S: if (y < 7) y++; break;
                     case ConsoleKey.RightArrow: case ConsoleKey.D: if (x < 7) x++; break;
                     case ConsoleKey.LeftArrow: case ConsoleKey.A: if (x > 0) x--; break;
-                    case ConsoleKey.R: rotation = (rotation == "horizontally") ? "vertically" : "horizontally"; break;
+                    //case ConsoleKey.R: rotation = (rotation == "horizontally") ? "vertically" : "horizontally"; break;
                     case ConsoleKey.Enter:
                         endMove = true;
                         break; // <------ Add method for placing ships

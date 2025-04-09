@@ -10,8 +10,10 @@ namespace ShipGame
         {
             Ship player = new Ship();
             Grid grid = new Grid();
-            grid.resetGrid();
-            grid.controlGrid();
+            //grid.resetGrid();
+            //grid.controlGrid();
+            player.resetGrid();
+            player.controlShip();
             
             Console.WriteLine("Hello World!");
         }
