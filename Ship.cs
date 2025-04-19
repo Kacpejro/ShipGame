@@ -1,95 +1,35 @@
-﻿using System;
+﻿using ShipGame.PlayerClass;
+using System;
 using ShipGame.GridClass;
 
 namespace ShipGame.ShipClass
 {
-    public class Ship : Grid
+    public class Ship
     {
         private string rotation = "vertically";
-        private int shipSize = 3;
-        private bool goodMove = false;
+        private int shipSize;
+        private int x = 0;
+        private int y = 0;
 
-        public void showShipGrid()
+        public Ship(int size = 1)
         {
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (i == y && j == x)
-                    {
-                        grid[i, j] = "O";
-                        if (rotation == "horizontally")
-                        {
-                            for (int k = shipSize; k > 0; k--)
-                            {
-                                grid[i, j + k - 1] = "O";
-                            }
-                        }
-                        else
-                        {
-                            for (int k = shipSize; k > 0; k--)
-                            {
-                                grid[i + k - 1, j] = "O";
-                            }
-                        }
-                        Console.BackgroundColor = ConsoleColor.Gray;
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.Write(grid[i, j]);
-                        if (j != 7)
-                        {
-                            Console.Write(" ");
-                            Console.ResetColor();
-                            Console.Write("| ");
-                        }
-                        else
-                        {
-                            Console.ResetColor();
-                        }
-                        goodMove = true;
-                    }
-                    else if (j == x - 1 && i == y)
-                    {
-                        Console.Write(grid[i, j]);
-                        if (j != 7)
-                        {
-                            Console.Write(" |");
-                            Console.BackgroundColor = ConsoleColor.Gray;
-                            Console.Write(" ");
-                            Console.ResetColor();
-                        }
-                        goodMove = true;
-                    }
-                    else
-                    {
-                        Console.Write(grid[i, j]);
-                        if (j != 7)
-                        {
-                            Console.Write(" | ");
-                        }
-                        goodMove = true;
-                    }
-                }
-
-                Console.WriteLine();
-
-                if (i != 7)
-                {
-                    Console.WriteLine("--+---+---+---+---+---+---+--");
-                }
-            }
+            shipSize = size;
         }
 
-        public void controlShip()
+
+        public void placeShip(Grid map)
         {
             bool endMove = false;
             do
             {
                 Console.Clear();
-                resetGrid();
-                showShipGrid();
+                map.refreshGrid();
+                map.showShipGrid(rotation, shipSize, x, y);
 
                 Console.WriteLine(x);
                 Console.WriteLine(y);
+                Console.WriteLine();
+                Console.WriteLine(rotation);
                 var key = Console.ReadKey(true);
                 switch (key.Key)
                 {
@@ -97,10 +37,15 @@ namespace ShipGame.ShipClass
                     case ConsoleKey.DownArrow: case ConsoleKey.S: if ((rotation == "horizontally" && y < 7) || (rotation == "vertically" && y + shipSize - 1 < 7)) y++; break;
                     case ConsoleKey.RightArrow: case ConsoleKey.D: if ((rotation == "vertically" && x < 7) || (rotation == "horizontally" && x + shipSize - 1 < 7)) x++; break;
                     case ConsoleKey.LeftArrow: case ConsoleKey.A: if (x > 0) x--; break;
-                    case ConsoleKey.R: rotation = (rotation == "horizontally") ? "vertically" : "horizontally"; break;
-                    case ConsoleKey.Enter:
-                        endMove = true;
-                        break; // <------ Add method for placing ships
+                    case ConsoleKey.R:
+                        if ((rotation == "horizontally" && y + shipSize - 1 < 8) || (rotation == "vertically" && x + shipSize - 1 < 8))
+                        {
+                            rotation = (rotation == "horizontally") ? "vertically" : "horizontally";
+                        }
+                        break;
+                    case ConsoleKey.Enter: // do poprawy!
+                        endMove = map.checkFreeSpace(rotation, shipSize , x, y, endMove);
+                        break;
                 }
             } while (endMove == false);
         }
