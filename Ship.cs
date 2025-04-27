@@ -24,7 +24,7 @@ namespace ShipGame.ShipClass
             {
                 Console.Clear();
                 map.refreshGrid();
-                map.showShipGrid(rotation, shipSize, x, y);
+                map.showPlacingShipGrid(rotation, shipSize, x, y);
 
                 Console.WriteLine(x);
                 Console.WriteLine(y);
@@ -43,7 +43,7 @@ namespace ShipGame.ShipClass
                             rotation = (rotation == "horizontally") ? "vertically" : "horizontally";
                         }
                         break;
-                    case ConsoleKey.Enter: // do poprawy!
+                    case ConsoleKey.Enter:
                         endMove = map.checkFreeSpace(rotation, shipSize , x, y, endMove);
                         break;
                 }

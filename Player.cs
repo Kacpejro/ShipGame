@@ -6,33 +6,37 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace ShipGame.PlayerClass
 {
     internal class Player
     {
-        public void setShips()
+        private int x;
+        private int y;
+        public void attack(Grid map)
         {
-            Grid atackMap = new Grid();
-            Grid shipMap = new Grid();
+            bool endMove = false;
 
-            Ship ship1 = new Ship(3);
-            ship1.placeShip(shipMap);
+            x = 0;
+            y = 0;
 
-            Ship ship2 = new Ship(3);
-            ship2.placeShip(shipMap);
-
-            Ship ship3 = new Ship(2);
-            ship3.placeShip(shipMap);
-
-            Ship ship4 = new Ship(2);
-            ship4.placeShip(shipMap);
-
-            Ship ship5 = new Ship(1);
-            ship5.placeShip(shipMap);
-
-            Ship ship6 = new Ship(1);
-            ship6.placeShip(shipMap);
+            do
+            {
+                Console.Clear();
+                map.showGrid(x, y);
+                var key = Console.ReadKey(true);
+                switch (key.Key)
+                {
+                    case ConsoleKey.UpArrow: case ConsoleKey.W: if (y > 0) y--; break;
+                    case ConsoleKey.DownArrow: case ConsoleKey.S: if (y < 7) y++; break;
+                    case ConsoleKey.RightArrow: case ConsoleKey.D: if (x < 7) x++; break;
+                    case ConsoleKey.LeftArrow: case ConsoleKey.A: if (x > 0) x--; break;
+                    case ConsoleKey.Enter:
+                        endMove = map.attackCheck(y, x, endMove);
+                        break;
+                }
+            } while (endMove == false);
         }
     }
 }

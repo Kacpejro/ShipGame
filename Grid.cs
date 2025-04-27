@@ -9,7 +9,6 @@ namespace ShipGame.GridClass
 public class Grid
     {
         private string[,] grid = new string[8, 8];
-        private bool goodMove = false;
         public void resetGrid()
         {
             for (int i = 0; i < 8; i++)
@@ -20,6 +19,7 @@ public class Grid
                 }
             }
         }
+
         public void refreshGrid()
         {
             for (int i = 0; i < 8; i++)
@@ -49,10 +49,9 @@ public class Grid
                     grid[y, x + i - 1] = "O";
                 }
             }
-            
         }
 
-        public bool checkFreeSpace(string rotation, int shipSize, int x, int y, bool endMove = false)//Tutaj coś nie gra. Chuj wi co
+        public bool checkFreeSpace(string rotation, int shipSize, int x, int y, bool endMove = false)
         {
             bool isGoodPosision = true;
             if (rotation == "vertically")
@@ -84,8 +83,38 @@ public class Grid
             return endMove;
         }
 
+        public bool attackCheck(int x, int y, bool endMove)
+        {
+            if (grid[x, y] == "O")
+            {
+                grid[x, y] = "X";
+                endMove = true;
+            } else if (grid[x, y] == " ")
+            {
+                grid[x, y] = "-";
+                endMove = true;
+            }
+            return endMove;
+        }
 
-        public void showShipGrid(string rotation, int shipSize, int x, int y)
+        public bool checkWin(string name)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (grid[i, j] == "O")
+                    {
+                        return false;
+                    }
+                }
+            }
+            Console.Clear();
+            showGrid(-1, -1);
+            Console.WriteLine(name + " wins");
+            return true;
+        }
+        public void showPlacingShipGrid(string rotation, int shipSize, int x, int y)
         {
             for (int i = 0; i < 8; i++)
             {
@@ -126,7 +155,6 @@ public class Grid
                         {
                             Console.ResetColor();
                         }
-                        goodMove = true;
                     }
                     else if (j == x - 1 && i == y)
                     {
@@ -138,7 +166,6 @@ public class Grid
                             Console.Write(" ");
                             Console.ResetColor();
                         }
-                        goodMove = true;
                     }
                     else
                     {
@@ -147,7 +174,58 @@ public class Grid
                         {
                             Console.Write(" | ");
                         }
-                        goodMove = true;
+                    }
+                }
+
+                Console.WriteLine();
+
+                if (i != 7)
+                {
+                    Console.WriteLine("--+---+---+---+---+---+---+--");
+                }
+            }
+        }
+
+        public void showGrid(int x, int y)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (i == y && j == x)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Gray;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write(grid[i, j]);
+                        if (j != 7)
+                        {
+                            Console.Write(" ");
+                            Console.ResetColor();
+                            Console.Write("| ");
+                        }
+                        else
+                        {
+                            Console.ResetColor();
+                        }
+                    }
+                    else if (j == x - 1 && i == y)
+                    {
+                        Console.Write(grid[i, j]);
+                        if (j != 7)
+                        {
+                            Console.Write(" |");
+                            Console.BackgroundColor = ConsoleColor.Gray;
+                            Console.Write(" ");
+                            Console.ResetColor();
+                        }
+                    }
+                    else
+                    {
+                        Console.Write(grid[i, j]);
+                        if (j != 7)
+                        {
+                            Console.Write(" | ");
+                        }
                     }
                 }
 
